@@ -1,47 +1,36 @@
-import React, { Component } from 'react';
+import React, { useState } from "react";
 
-import { FiSearch } from 'react-icons/fi';
-import { FormBtn, InputSearch, SearchFormStyled } from './SearchForm.styled';
+import { FiSearch } from "react-icons/fi";
+import { FormBtn, InputSearch, SearchFormStyled } from "./SearchForm.styled";
 
-export class SearchForm extends Component {
-  state = {
-    query: '',
-  };
+export const SearchForm = ({ onSubmit }) => {
+	const [query, setQuery] = useState("");
 
-  handleInput = e => {
-    this.setState({
-      query: e.currentTarget.value,
-    });
-  };
+	const handleInput = (e) => {
+		setQuery(e.currentTarget.value);
+	};
 
-  handleSubmit = e => {
-    const { query } = this.state;
+	const handleSubmit = (e) => {
+		e.preventDefault();
 
-    e.preventDefault();
+		onSubmit(query);
 
-    this.props.onSubmit(query);
+		setQuery("");
+	};
 
-    this.setState({
-      query: '',
-    });
-  };
-  render() {
-    const { query } = this.state;
-
-    return (
-      <SearchFormStyled onSubmit={this.handleSubmit}>
-        <FormBtn type="submit">
-          <FiSearch size="16px" />
-        </FormBtn>
-        <InputSearch
-          onChange={this.handleInput}
-          placeholder="What do you want to write?"
-          name="search"
-          required
-          value={query}
-          autoFocus
-        />
-      </SearchFormStyled>
-    );
-  }
-}
+	return (
+		<SearchFormStyled onSubmit={handleSubmit}>
+			<FormBtn type="submit">
+				<FiSearch size="16px" />
+			</FormBtn>
+			<InputSearch
+				onChange={handleInput}
+				placeholder="What do you want to write?"
+				name="search"
+				required
+				value={query}
+				autoFocus
+			/>
+		</SearchFormStyled>
+	);
+};
